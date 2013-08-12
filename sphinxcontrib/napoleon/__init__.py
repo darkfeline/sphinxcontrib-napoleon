@@ -208,9 +208,9 @@ class Config(object):
     }
 
     def __init__(self, **settings):
-        for name, (default, rebuild) in self._config_values.iteritems():
+        for name, (default, rebuild) in self._config_values.items():
             setattr(self, name, default)
-        for name, value in settings.iteritems():
+        for name, value in settings.items():
             setattr(self, name, value)
 
 
@@ -243,7 +243,7 @@ def setup(app):
     app.connect('autodoc-process-docstring', _process_docstring)
     app.connect('autodoc-skip-member', _skip_member)
 
-    for name, (default, rebuild) in Config._config_values.iteritems():
+    for name, (default, rebuild) in Config._config_values.items():
         app.add_config_value(name, default, rebuild)
 
 

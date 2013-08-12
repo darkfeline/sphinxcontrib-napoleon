@@ -102,7 +102,7 @@ def apidoc(options):
         raise BuildFailure('Module dir (%s) does not exist' % moduledir)
 
     excludes = options.get('apidoc_excludes', [])
-    if isinstance(excludes, basestring):
+    if isinstance(excludes, str):
         excludes = [excludes]
 
     if options.get('apidoc_overwrite', True):
@@ -112,7 +112,7 @@ def apidoc(options):
 
     from sphinx.apidoc import main
     args.extend(['-o', outputdir, moduledir] + excludes)
-    print(' '.join(args))
+    print((' '.join(args)))
     main(args)
 
 

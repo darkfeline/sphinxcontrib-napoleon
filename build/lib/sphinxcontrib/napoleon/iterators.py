@@ -52,16 +52,13 @@ class peek_iter(object):
     def __iter__(self):
         return self
 
-    def __next__(self):
-        return self.next()
-
     def _fillcache(self, n):
         """Cache `n` items. If `n` is 0 or None, then 1 item is cached."""
         if not n:
             n = 1
         try:
             while len(self._cache) < n:
-                self._cache.append(self._iterable.next())
+                self._cache.append(next(self._iterable))
         except StopIteration:
             while len(self._cache) < n:
                 self._cache.append(self.sentinel)
@@ -80,6 +77,9 @@ class peek_iter(object):
 
         """
         return self.peek() != self.sentinel
+
+    def __next__(self):
+        return self.next()
 
     def next(self, n=None):
         """Get the next item or `n` items of the iterator.
@@ -208,7 +208,7 @@ class modify_iter(peek_iter):
             args = args[:2]
         else:
             self.modifier = lambda x: x
-        if not callable(self.modifier):
+        if not isinstance(self.modifier, collections.Callable):
             raise TypeError('modify_iter(o, modifier): '
                             'modifier must be callable')
         super(modify_iter, self).__init__(*args)
@@ -224,7 +224,7 @@ class modify_iter(peek_iter):
             n = 1
         try:
             while len(self._cache) < n:
-                self._cache.append(self.modifier(self._iterable.next()))
+                self._cache.append(self.modifier(next(self._iterable)))
         except StopIteration:
             while len(self._cache) < n:
                 self._cache.append(self.sentinel)
